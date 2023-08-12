@@ -22,13 +22,13 @@ function love.load()
             down = {"axis:lefty+", "button:dpdown"},
             up = {"axis:lefty-", "button:dpup"},
             right = {"axis:leftx+", "button:dpright"},
-            confirm = {"button:b"},
-            back = {"button:a"},
+            confirm = {"button:a"},
+            back = {"button:b"},
 
-            gameLeft = {"axis:triggerleft+", "axis:leftx-", "axis:rightx-", "button:dpleft", "button:y"},
-            gameDown = {"axis:lefty+", "axis:righty+", "button:leftshoulder", "button:dpdown", "button:b"},
-            gameUp = {"axis:lefty-", "axis:righty-", "button:rightshoulder", "button:dpup", "button:x"},
-            gameRight = {"axis:triggerright+", "axis:leftx+", "axis:rightx+", "button:dpright", "button:a"},
+            gameLeft = {"button:leftshoulder", "axis:leftx-", "axis:rightx-", "button:dpleft", "button:y"},
+            gameDown = {"axis:lefty+", "axis:righty+", "axis:triggerleft+", "button:dpdown", "button:b"},
+            gameUp = {"axis:lefty-", "axis:righty-", "axis:triggerright+", "button:dpup", "button:x"},
+            gameRight = {"button:rightshoulder", "axis:leftx+", "axis:rightx+", "button:dpright", "button:a"},
 
             gameBack = {"button:start"},
         },
@@ -44,7 +44,8 @@ function love.load()
     }
 
     font = love.graphics.newFont("assets/vcr.ttf", 18)
-    love.graphics.setFont(font)
+    menuFont = love.graphics.newFont("assets/vcr.ttf", 24)
+    love.graphics.setFont(menuFont)
 
     function lerp(a,b,t)
         return a + (b-a)*t
