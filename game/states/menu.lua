@@ -33,6 +33,8 @@ rightarrow = love.filesystem.load("assets/sprites/notes/right.lua")
 inst = love.audio.newSource("assets/music/Inst.ogg", "stream")
 voices = love.audio.newSource("assets/music/Voices.ogg", "stream")
 
+instDuration = inst:getDuration()
+
 healthbar = graphics.newImage(love.graphics.newImage("assets/sprites/healthBar.png"))
 healthbar.x = 160
 healthbar.y = 35
@@ -50,8 +52,15 @@ healthbar.sizeX, healthbar.sizeY = 0.75, 0.75
 boyfriendIcon.y = 35
 frogIcon.y = 35
 
+music = love.audio.newSource("assets/music/freakyMenu.ogg", "stream")
+music:setLooping(true)
+
+local textScale = 1
+
 return {
     enter = function(self)
+        girlfriend.x = 0
+        girlfriend.y = 0
         enemyArrows = {
             leftarrow(),
             downarrow(),
@@ -90,6 +99,16 @@ return {
         end
 
         self:generateNotes("assets/data/kero.json")
+
+        music:play()
+
+        musicTime = 0 -- miliseconds
+        danceLeft = false
+        beatHit = false
+        curBeat = 0
+        lastBeat = 0
+
+        girlfriend:animate("danceRight")
     end,
 
     generateNotes = function(self, chart)
@@ -315,7 +334,30 @@ return {
     end,
 
     update = function(self, dt)
+        musicTime = musicTime + 1000 * dt
+        girlfriend:update(dt)
+
+        -- check for beat hit
+        curBeat = math.floor(musicTime / (60000 / bpm))
+        if curBeat ~= lastBeat then
+            lastBeat = curBeat
+            beatHit = false
+            danceLeft = not danceLeft
+            if danceLeft then
+                weeks:safeAnimate(girlfriend, "danceLeft", false, 1)
+            else
+                weeks:safeAnimate(girlfriend, "danceRight", false, 1)
+            end
+
+            if curBeat % 4 == 0 then
+                textScale = 1.1
+            end
+        end
+
+        textScale = lerp(1, textScale, clamp(1 - (dt * 3.125), 0, 1))
+
         if input:pressed("confirm") then
+            music:stop()
             gamestate.switch(week)
         elseif input:pressed("back") then
             downscroll = not downscroll
@@ -340,6 +382,35 @@ return {
     end,
 
     draw = function(self, screen)
-        love.graphics.print("Press A to start\nPress B for downscroll: " .. tostring(downscroll), 0, 0)
+        dslayout:draw(screen,
+            function()
+                love.graphics.push()
+                    love.graphics.translate(200, 140)
+                    love.graphics.setColor(1, 1, 1, 1)
+                    love.graphics.rectangle("fill", -600, -200, 1200, 1200)
+                    love.graphics.setColor(0,0,0)
+                    love.graphics.printf(
+                        "* Friday Night Funkin\n* Vs Kero\n* 3DS Port - GuglioIsStupid",
+                        -185, -125,
+                        200,
+                        "left",
+                        0,
+                        textScale, textScale
+                    )
+                    love.graphics.setColor(1,1,1)
+                    love.graphics.translate(100, 0)
+
+                    girlfriend:draw()
+                    
+                love.graphics.pop()
+                
+            end,
+            function()
+                love.graphics.rectangle("fill", -600, -200, 1200, 1200)
+                love.graphics.setColor(0,0,0)
+                love.graphics.print("* Press A to play\n* Press B for downscroll: " .. tostring(downscroll), 15, 15)
+                love.graphics.setColor(1,1,1)
+            end
+        )
     end,
 }

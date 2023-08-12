@@ -50,6 +50,8 @@ return {
         boyfriendIcon:update(dt)
         frogIcon:update(dt)
 
+        clock:update(dt)
+
         for i = 1, 4 do
             local enemyNote = enemyNotes[i]
             local boyfriendNote = boyfriendNotes[i]
@@ -294,6 +296,14 @@ return {
 		end
 
         timePassed = timePassed + dt
+
+        local musicTimeSeconds = musicTime / 1000
+        -- get time left and format it to a str like minutes:seconds
+        timeLeft = instDuration - musicTimeSeconds
+        -- time in seconds
+        local minutes = math.floor(timeLeft / 60)
+        local seconds = math.floor(timeLeft - (minutes * 60))
+        timeLeft = string.format("%02d:%02d", minutes, seconds)
     end,
 
     safeAnimate = function(self, sprite, animName, loopAnim, timerID)
@@ -335,19 +345,19 @@ return {
             love.graphics.translate(23, 25)
             love.graphics.scale(0.85, 0.85)
             love.graphics.setColor(1,0,0)
-            love.graphics.rectangle("fill", 10, 28, health * 2.9, 15)
+            love.graphics.rectangle("fill", 10, 28, health * 3, 15)
             love.graphics.setColor(1,1,1)
             healthbar:draw()
-            boyfriendIcon.x = 35 + health * 2.9
+            boyfriendIcon.x = 35 + health * 3
             boyfriendIcon:draw()
-            frogIcon.x = -15 + health * 2.9
+            frogIcon.x = -15 + health * 3
             frogIcon:draw()
         love.graphics.pop()
 
         clock:draw()
 
         love.graphics.push()
-            borderedText(timeleft, 255, 12)
+            borderedText(timeLeft, 255, 12)
 
             love.graphics.scale(0.9, 0.9)
             borderedText("Score: " .. score .. "  |  Misses: " .. misses .. "  |  Combo: " .. combo, 10, 14)
