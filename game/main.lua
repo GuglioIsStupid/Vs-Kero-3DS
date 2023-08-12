@@ -26,10 +26,10 @@ function love.load()
                 confirm = {"button:b"},
                 back = {"button:a"},
 
-                gameLeft = {"axis:triggerleft+", "axis:leftx-", "axis:rightx-", "button:dpleft", "button:y"},
-                gameDown = {"axis:lefty+", "axis:righty+", "button:leftshoulder", "button:dpdown", "button:b"},
-                gameUp = {"axis:lefty-", "axis:righty-", "button:rightshoulder", "button:dpup", "button:x"},
-                gameRight = {"axis:triggerright+", "axis:leftx+", "axis:rightx+", "button:dpright", "button:a"},
+                gameLeft = {"axis:triggerleft+", "axis:leftx-", "axis:rightx-", "button:dpleft", "button:x"},
+                gameDown = {"axis:lefty+", "axis:righty+", "button:leftshoulder", "button:dpdown", "button:a"},
+                gameUp = {"axis:lefty-", "axis:righty-", "button:rightshoulder", "button:dpup", "button:y"},
+                gameRight = {"axis:triggerright+", "axis:leftx+", "axis:rightx+", "button:dpright", "button:b"},
 
                 gameBack = {"button:start"},
             },
@@ -45,10 +45,10 @@ function love.load()
                 confirm = {"button:b"},
                 back = {"button:a"},
 
-                gameLeft = {"axis:triggerleft+", "axis:leftx-", "axis:rightx-", "button:dpleft", "button:x"},
-                gameDown = {"axis:lefty+", "axis:righty+", "button:leftshoulder", "button:dpdown", "button:a"},
-                gameUp = {"axis:lefty-", "axis:righty-", "button:rightshoulder", "button:dpup", "button:y"},
-                gameRight = {"axis:triggerright+", "axis:leftx+", "axis:rightx+", "button:dpright", "button:b"},
+                gameLeft = {"axis:triggerleft+", "axis:leftx-", "axis:rightx-", "button:dpleft", "button:y"},
+                gameDown = {"axis:lefty+", "axis:righty+", "button:leftshoulder", "button:dpdown", "button:b"},
+                gameUp = {"axis:lefty-", "axis:righty-", "button:rightshoulder", "button:dpup", "button:x"},
+                gameRight = {"axis:triggerright+", "axis:leftx+", "axis:rightx+", "button:dpright", "button:a"},
 
                 gameBack = {"button:start"},
             },
