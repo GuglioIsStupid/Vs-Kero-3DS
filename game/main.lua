@@ -16,45 +16,24 @@ function love.load()
 
     downscroll = false
     local curOS = love.system.getOS()
-    if curOS ~= "3ds" then
-        input = (require("lib.baton")).new {
-            controls = {
-                left = {"axis:leftx-", "button:dpleft"},
-                down = {"axis:lefty+", "button:dpdown"},
-                up = {"axis:lefty-", "button:dpup"},
-                right = {"axis:leftx+", "button:dpright"},
-                confirm = {"button:b"},
-                back = {"button:a"},
+    input = (require("lib.baton")).new {
+        controls = {
+            left = {"axis:leftx-", "button:dpleft"},
+            down = {"axis:lefty+", "button:dpdown"},
+            up = {"axis:lefty-", "button:dpup"},
+            right = {"axis:leftx+", "button:dpright"},
+            confirm = {"button:b"},
+            back = {"button:a"},
 
-                gameLeft = {"axis:triggerleft+", "axis:leftx-", "axis:rightx-", "button:dpleft", "button:x"},
-                gameDown = {"axis:lefty+", "axis:righty+", "button:leftshoulder", "button:dpdown", "button:a"},
-                gameUp = {"axis:lefty-", "axis:righty-", "button:rightshoulder", "button:dpup", "button:y"},
-                gameRight = {"axis:triggerright+", "axis:leftx+", "axis:rightx+", "button:dpright", "button:b"},
+            gameLeft = {"axis:triggerleft+", "axis:leftx-", "axis:rightx-", "button:dpleft", "button:y"},
+            gameDown = {"axis:lefty+", "axis:righty+", "button:leftshoulder", "button:dpdown", "button:b"},
+            gameUp = {"axis:lefty-", "axis:righty-", "button:rightshoulder", "button:dpup", "button:x"},
+            gameRight = {"axis:triggerright+", "axis:leftx+", "axis:rightx+", "button:dpright", "button:a"},
 
-                gameBack = {"button:start"},
-            },
-            joystick = love.joystick.getJoysticks()[1],
-        }
-    else
-        input = (require("lib.baton")).new {
-            controls = {
-                left = {"axis:leftx-", "button:dpleft"},
-                down = {"axis:lefty+", "button:dpdown"},
-                up = {"axis:lefty-", "button:dpup"},
-                right = {"axis:leftx+", "button:dpright"},
-                confirm = {"button:b"},
-                back = {"button:a"},
-
-                gameLeft = {"axis:triggerleft+", "axis:leftx-", "axis:rightx-", "button:dpleft", "button:y"},
-                gameDown = {"axis:lefty+", "axis:righty+", "button:leftshoulder", "button:dpdown", "button:b"},
-                gameUp = {"axis:lefty-", "axis:righty-", "button:rightshoulder", "button:dpup", "button:x"},
-                gameRight = {"axis:triggerright+", "axis:leftx+", "axis:rightx+", "button:dpright", "button:a"},
-
-                gameBack = {"button:start"},
-            },
-            joystick = love.joystick.getJoysticks()[1],
-        }
-    end
+            gameBack = {"button:start"},
+        },
+        joystick = love.joystick.getJoysticks()[1],
+    }
 
     camera = {
         zoom = 1,
