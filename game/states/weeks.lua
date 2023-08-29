@@ -246,11 +246,6 @@ return {
             else
                 self:safeAnimate(girlfriend, "danceRight", false, 1)
             end
-
-            --[[ if curBeat % 4 == 0 then
-                camera.zoom = camera.zoom + 0.015
-                uiScale.zoom = uiScale.zoom + 0.03
-            end ]]
         end
 
         for i = 1, #events do
@@ -276,9 +271,6 @@ return {
         end ]]
 
         if musicThres ~= oldMusicThres and math.fmod(absMusicTime, 120000 / bpm) < 100 then
-			if spriteTimers[1] == 0 then
-				
-			end
 			if spriteTimers[2] == 0 then
 				self:safeAnimate(enemy, "idle", false, 2)
 			end
@@ -287,7 +279,7 @@ return {
 			end
 		end
 
-		for i = 1, 3 do
+		for i = 2, 3 do
 			local spriteTimer = spriteTimers[i]
 
 			if spriteTimer > 0 then

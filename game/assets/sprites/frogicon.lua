@@ -24,11 +24,11 @@ return graphics.newSprite(
 		{x = 63, y = 30, width = 31, height = 32, offsetX = -6, offsetY = -3, offsetWidth = 41, offsetHeight = 35} -- 20: die0003
 	},
     {
-        ["win"] = {start = 1, stop = 4, speed = 24, offsetX = 0, offsetY = 0},
-		["normaltowin"] = {start = 5, stop = 8, speed = 24, offsetX = 0, offsetY = 0},
-		["normal"] = {start = 9, stop = 12, speed = 24, offsetX = 0, offsetY = 0},
-		["normaltodie"] = {start = 13, stop = 16, speed = 24, offsetX = 0, offsetY = 0},
-		["die"] = {start = 17, stop = 20, speed = 24, offsetX = 0, offsetY = 0},
+        ["win"] = {start = 1, stop = 4, speed = 12, offsetX = 0, offsetY = 0},
+		["normaltowin"] = {start = 5, stop = 8, speed = 12, offsetX = 0, offsetY = 0},
+		["normal"] = {start = 9, stop = 12, speed = 12, offsetX = 0, offsetY = 0},
+		["normaltodie"] = {start = 13, stop = 16, speed = 12, offsetX = 0, offsetY = 0},
+		["die"] = {start = 17, stop = 20, speed = 12, offsetX = 0, offsetY = 0},
     },
     "normal",
     true

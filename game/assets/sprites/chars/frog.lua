@@ -44,12 +44,12 @@ return graphics.newSprite(
 		{x = 289, y = 231, width = 85, height = 87, offsetX = -21, offsetY = -63, offsetWidth = 126, offsetHeight = 180} -- 21: hey0003
 	},
 	{
-		["down"] = {start = 5, stop = 7, speed = 24, offsetX = 0, offsetY = 0},
-		["left"] = {start = 12, stop = 14, speed = 24, offsetX = 0, offsetY = 0},
-		["right"] = {start = 15, stop = 17, speed = 24, offsetX = 0, offsetY = 0},
-		["up"] = {start = 8, stop = 11, speed = 24, offsetX = 0, offsetY = 0},
-		["idle"] = {start = 1, stop = 4, speed = 24, offsetX = 0, offsetY = 0},
-        ["hey"] = {start = 18, stop = 21, speed = 24, offsetX = 0, offsetY = 0},
+		["down"] = {start = 5, stop = 7, speed = 12, offsetX = 0, offsetY = 0},
+		["left"] = {start = 12, stop = 14, speed = 12, offsetX = 0, offsetY = 0},
+		["right"] = {start = 15, stop = 17, speed = 12, offsetX = 0, offsetY = 0},
+		["up"] = {start = 8, stop = 11, speed = 12, offsetX = 0, offsetY = 0},
+		["idle"] = {start = 1, stop = 4, speed = 12, offsetX = 0, offsetY = 0},
+        ["hey"] = {start = 18, stop = 21, speed = 12, offsetX = 0, offsetY = 0},
 	},
 	"idle",
 	false

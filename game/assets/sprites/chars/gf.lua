@@ -38,9 +38,9 @@ return graphics.newSprite(
 		{x = 0, y = 167, width = 123, height = 168, offsetX = -3, offsetY = 2, offsetWidth = 124, offsetHeight = 165} -- 15: danceRight0005
 	},
 	{
-		["danceLeft"] = {start = 4, stop = 9, speed = 24, offsetX = 0, offsetY = 0},
-        ["danceRight"] = {start = 10, stop = 15, speed = 24, offsetX = 0, offsetY = 0},
-		["sad"] = {start = 1, stop = 3, speed = 24, offsetX = 0, offsetY = -6}
+		["danceLeft"] = {start = 4, stop = 9, speed = 12, offsetX = 0, offsetY = 0},
+        ["danceRight"] = {start = 10, stop = 15, speed = 12, offsetX = 0, offsetY = 0},
+		["sad"] = {start = 1, stop = 3, speed = 12, offsetX = 0, offsetY = -6}
 	},
 	"danceLeft",
 	false

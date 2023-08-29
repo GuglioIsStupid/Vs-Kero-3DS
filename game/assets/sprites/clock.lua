@@ -7,7 +7,7 @@ return graphics.newSprite(
 		{x = 26, y = 0, width = 13, height = 13, offsetX = 0, offsetY = 0, offsetWidth = 0, offsetHeight = 0} -- 3: clock00002
 	},
     {
-        ["anim"] = {start = 1, stop = 3, speed = 24, offsetX = 0, offsetY = 0},
+        ["anim"] = {start = 1, stop = 3, speed = 12, offsetX = 0, offsetY = 0},
     },
     "anim",
     true
