@@ -7,6 +7,7 @@ end
 
 return {
     enter = function()
+        song = 1
         camera.zooming = false
         didReadyText = false
         enemy.x = -300
@@ -28,43 +29,6 @@ return {
         love.graphics.setFont(font)
 
         weeks:enter()
-
-        --[[ Timer.after(
-            2,
-            function()
-                drawInfo = false
-                Timer.after(
-                    2,
-                    function()
-                        drawInfo = true
-                        Timer.after(
-                            1.25,
-                            function()
-                                drawInfo = false
-                                drawGO = true
-                                Timer.tween(
-                                    0.3,
-                                    readyPos,
-                                    {
-                                        x = 250,
-                                        y = 175
-                                    },
-                                    "linear"
-                                )
-                                Timer.after(
-                                    0.3,
-                                    function()
-                                        drawGO = false
-                                        drawUI = true
-                                        drawChar = true
-                                    end
-                                )
-                            end
-                        )
-                    end
-                )
-            end
-        ) ]]
 
         readyPos = {
             x=0,y=0

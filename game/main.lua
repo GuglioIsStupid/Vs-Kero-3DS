@@ -22,6 +22,9 @@ if love._console == "Non_Console_PC" then
     end
 end
 
+song = 1
+songEvents = {}
+
 function love.load()
     require "lib.dslayout"
 
@@ -52,6 +55,8 @@ function love.load()
             gameRight = {"axis:triggerright+", "axis:leftx+", "axis:rightx+", "button:dpright", "button:a"},
 
             gameBack = {"button:start"},
+
+            bonusSongButton = {"button:back"}
         },
         joystick = love.joystick.getJoysticks()[1],
     }
@@ -88,6 +93,7 @@ function love.load()
     menu = require "states.menu"
     weeks = require "states.weeks"
     kero_week = require "states.kero-week"
+    hman_week = require "states.hman-week"
 
     gamestate.switch(menu)
 

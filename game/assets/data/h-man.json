@@ -11186,7 +11186,7 @@
 		"song": "H MAN",
 		"needsVoices": true,
 		"stage": "hmandungeon",
-		"speed": 3.2,
+		"speed": 1,
 		"bpm": 110
 	}
 }

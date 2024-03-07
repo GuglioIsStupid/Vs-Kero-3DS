@@ -6,55 +6,67 @@ function borderedText(text, x, y)
     love.graphics.print(text, x, y)
     love.graphics.setColor(1, 1, 1, 1)
 end
-bfimg = love.graphics.newImage("assets/sprites/chars/bf.png")
-gfimg = love.graphics.newImage("assets/sprites/chars/gf.png")
-frogimg = love.graphics.newImage("assets/sprites/chars/frog.png")
 
-bficonimg = love.graphics.newImage("assets/sprites/bficon.png")
-frogiconimg = love.graphics.newImage("assets/sprites/frogicon.png")
+function loadDefaultAssets()
+    bfimg = love.graphics.newImage("assets/sprites/chars/bf.png")
+    gfimg = love.graphics.newImage("assets/sprites/chars/gf.png")
+    frogimg = love.graphics.newImage("assets/sprites/chars/frog.png")
+    guyimg = love.graphics.newImage("assets/sprites/chars/guy.png")
+    hshopmanimg = love.graphics.newImage("assets/sprites/chars/hshopman.png")
 
-clockimg = love.graphics.newImage("assets/sprites/clock.png")
+    bficonimg = love.graphics.newImage("assets/sprites/bficon.png")
+    frogiconimg = love.graphics.newImage("assets/sprites/frogicon.png")
 
-boyfriend = love.filesystem.load("assets/sprites/chars/bf.lua")()
-girlfriend = love.filesystem.load("assets/sprites/chars/gf.lua")()
-enemy = love.filesystem.load("assets/sprites/chars/frog.lua")()
+    clockimg = love.graphics.newImage("assets/sprites/clock.png")
 
-noteimg = love.graphics.newImage("assets/sprites/notes/notes.png")
+    funkylightimg = love.graphics.newImage("assets/sprites/funkylight.png")
 
-leftarrow = love.filesystem.load("assets/sprites/notes/left.lua")
-downarrow = love.filesystem.load("assets/sprites/notes/down.lua")
-uparrow = love.filesystem.load("assets/sprites/notes/up.lua")
-rightarrow = love.filesystem.load("assets/sprites/notes/right.lua")
+    boyfriend = love.filesystem.load("assets/sprites/chars/bf.lua")()
+    girlfriend = love.filesystem.load("assets/sprites/chars/gf.lua")()
+    enemy = love.filesystem.load("assets/sprites/chars/frog.lua")()
 
-inst = love.audio.newSource("assets/music/kero-Inst.ogg", "stream")
-voices = love.audio.newSource("assets/music/kero-Voices.ogg", "stream")
+    noteimg = love.graphics.newImage("assets/sprites/notes/notes.png")
 
-instDuration = inst:getDuration()
+    leftarrow = love.filesystem.load("assets/sprites/notes/left.lua")
+    downarrow = love.filesystem.load("assets/sprites/notes/down.lua")
+    uparrow = love.filesystem.load("assets/sprites/notes/up.lua")
+    rightarrow = love.filesystem.load("assets/sprites/notes/right.lua")
 
-healthbar = graphics.newImage(love.graphics.newImage("assets/sprites/healthBar.png"))
-healthbar.x = 160
-healthbar.y = 35
+    inst = love.audio.newSource("assets/music/kero-Inst.ogg", "stream")
+    voices = love.audio.newSource("assets/music/kero-Voices.ogg", "stream")
 
-boyfriendIcon = love.filesystem.load("assets/sprites/bficon.lua")()
-frogIcon = love.filesystem.load("assets/sprites/frogicon.lua")()
+    instDuration = inst:getDuration()
 
-clock = love.filesystem.load("assets/sprites/clock.lua")()
-clock.x = 300
-clock.y = 20
-clock.sizeX, clock.sizeY = 3, 3
+    healthbar = graphics.newImage(love.graphics.newImage("assets/sprites/healthBar.png"))
+    healthbar.x = 160
+    healthbar.y = 35
 
-healthbar.sizeX, healthbar.sizeY = 0.75, 0.75
+    boyfriendIcon = love.filesystem.load("assets/sprites/bficon.lua")()
+    frogIcon = love.filesystem.load("assets/sprites/frogicon.lua")()
 
-boyfriendIcon.y = 35
-frogIcon.y = 35
+    clock = love.filesystem.load("assets/sprites/clock.lua")()
+    clock.x = 300
+    clock.y = 20
+    clock.sizeX, clock.sizeY = 3, 3
 
-music = love.audio.newSource("assets/music/freakyMenu.ogg", "stream")
-music:setLooping(true)
+    funkylight = love.filesystem.load("assets/sprites/funkylight.lua")()
+
+    healthbar.sizeX, healthbar.sizeY = 0.75, 0.75
+
+    boyfriendIcon.y = 35
+    frogIcon.y = 35
+
+    music = love.audio.newSource("assets/music/freakyMenu.ogg", "stream")
+    music:setLooping(true)
+end
+
+loadDefaultAssets()
 
 local textScale = 1
 
 return {
     enter = function(self)
+        love.graphics.setFont(menuFont)
         girlfriend.x = 0
         girlfriend.y = 0
         enemyArrows = {
@@ -110,24 +122,29 @@ return {
     generateNotes = function(self, chart)
         local eventBpm
         events = {}
+        songEvents = {}
+        bpm = nil
+        for i = 1, 4 do
+            enemyNotes[i] = {}
+            boyfriendNotes[i] = {}
+        end
 
         chart = json.decode(love.filesystem.read(chart)).song
         songname = chart.song
 
-        for i = 1, #chart.notes do
-            bpm = chart.notes[i].bpm
-
-            if bpm then
-                break
-            end
-        end
-        if not bpm then
-            bpm = chart.bpm or 100
-        end
+        bpm = chart.bpm or 100
         crochet = ((60/bpm) * 1000) -- Beats in milliseconds
         stepCrochet = crochet / 4
 
         speed = chart.speed
+        if song == 2 then
+            for i = 1, #chart.events do
+                local eventTime = chart.events[i][1]
+                local allEvents = chart.events[i][2]
+                table.insert(songEvents, {eventTime = eventTime, allEvents = allEvents})
+            end
+        end
+        table.sort(songEvents, function(a, b) return a.eventTime < b.eventTime end)
 
         for i = 1, #chart.notes do
             for j = 1, #chart.notes[i].sectionNotes do
@@ -376,6 +393,31 @@ return {
                     end
                 end
             end
+        elseif input:pressed("bonusSongButton") then
+            song = 2
+            if inst then inst:release() end
+            if voices then voices:release() end
+            inst = love.audio.newSource("assets/music/hman-Inst.ogg", "stream")
+            voices = love.audio.newSource("assets/music/hman-Voices.ogg", "stream")
+            self:generateNotes("assets/data/h-man.json")
+            boyfriend = love.filesystem.load("assets/sprites/chars/guy.lua")()
+            enemy = love.filesystem.load("assets/sprites/chars/hshopman.lua")()
+            for i = 1, 4 do
+                for j = 1, #boyfriendNotes[i] do
+                    -- if anim is end, flip it
+                    if boyfriendNotes[i][j]:getAnimName() == "end" then
+                        boyfriendNotes[i][j].sizeY = downscroll and -1 or 1
+                    end
+                end
+                for j = 1, #enemyNotes[i] do
+                    -- if anim is end, flip it
+                    if enemyNotes[i][j]:getAnimName() == "end" then
+                        enemyNotes[i][j].sizeY = downscroll and -1 or 1
+                    end
+                end
+            end
+            music:stop()
+            gamestate.switch(hman_week)
         end
     end,
 

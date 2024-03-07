@@ -141,6 +141,7 @@ return {
 			offsetY = 0,
 			shearX = 0,
 			shearY = 0,
+			visible = true,
 
 			setSheet = function(self, imageData)
 				sheet = imageData
@@ -153,6 +154,14 @@ return {
 			end,
 
 			animate = function(self, animName, loopAnim, afterFunc)
+				if not anims[animName] then 
+					if animName:find(" alt") then
+						-- remove it and try
+						animName = animName:gsub(" alt", "")
+						self:animate(animName, loopAnim, afterFunc)
+					end
+					return
+				end
 				anim.name = animName
 				anim.start = anims[animName].start
 				anim.stop = anims[animName].stop
@@ -196,7 +205,7 @@ return {
 				end
 
 				if isAnimated and frame > anim.stop then
-					if afterFunc then print("AFTERFUNC"); afterFunc(); afterFunc = nil end
+					if afterFunc then afterFunc(); afterFunc = nil end
 					if isLooped then
 						frame = anim.start
 					else
@@ -205,6 +214,7 @@ return {
 				end
 			end,
 			draw = function(self)
+				if not self.visible then return end
 				local flooredFrame = math.floor(frame)
 
 				if flooredFrame <= anim.stop then

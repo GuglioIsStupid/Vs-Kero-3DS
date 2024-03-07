@@ -43,6 +43,7 @@ return {
         musicTime = musicTime + 1000 * dt
         absMusicTime = math.abs(musicTime)
 		musicThres = math.floor(absMusicTime / 100) -- Since "musicTime" isn't precise, this is needed
+        beatHit = false
         enemy:update(dt)
         boyfriend:update(dt)
         girlfriend:update(dt)
@@ -89,10 +90,12 @@ return {
                 if (not downscroll and enemyNote[1].y <= -90) or (downscroll and enemyNote[1].y >= 90) then
                     voices:setVolume(1)
 
-                    if enemyNote[1].ver ~= "Hey!" and enemyNote[1].ver ~= "No Animation" then
+                    if enemyNote[1].ver == "normal" then
                         self:safeAnimate(enemy, animList[i], false, 2)
-                    else
+                    elseif enemyNote[1].ver == "Hey!" then
                         self:safeAnimate(enemy, "hey", false, 2)
+                    elseif enemyNote[1].ver == "Alt Animation" then
+                        self:safeAnimate(enemy, animList[i] .. " alt", false, 2)
                     end
 
                     enemyArrow:animate("confirm")
@@ -136,7 +139,6 @@ return {
                                 notMissed[noteNum] = true
 
                                 notePos = math.abs(boyfriendNote[j].time - musicTime)
-                                print(notePos)
 
                                 if voices then voices:setVolume(1) end
 
@@ -162,7 +164,11 @@ return {
                                     --boyfriend:animate(animList[i])
                                     --self:safeAnimate(boyfriend, animList[i], false, 3)
                                     if boyfriendNote[j].ver ~= "Hey!" and boyfriendNote[1].ver ~= "No Animation" then
-                                        self:safeAnimate(boyfriend, animList[i], false, 3)
+                                        if not boyfriendNote[j].ver == "Alt Animation" then
+                                            self:safeAnimate(boyfriend, animList[i], false, 3)
+                                        else
+                                            self:safeAnimate(boyfriend, animList[i] .. " alt", false, 3)
+                                        end
                                     else
                                         self:safeAnimate(boyfriend, "hey", false, 3)
                                     end
@@ -203,7 +209,11 @@ return {
 
                 boyfriendArrow:animate("confirm")
                 if boyfriendNote[1].ver ~= "Hey!" and boyfriendNote[1].ver ~= "No Animation" then
-                    self:safeAnimate(boyfriend, animList[i], false, 3)
+                    if not boyfriendNote[1].ver == "Alt Animation" then
+                        self:safeAnimate(boyfriend, animList[i], false, 3)
+                    else
+                        self:safeAnimate(boyfriend, animList[i] .. " alt", false, 3)
+                    end
                 else
                     self:safeAnimate(boyfriend, "hey", false, 3)
                 end
@@ -252,7 +262,7 @@ return {
         curBeat = math.floor(musicTime / (60000 / bpm))
         if curBeat ~= lastBeat then
             lastBeat = curBeat
-            beatHit = false
+            beatHit = true
             danceLeft = not danceLeft
             if danceLeft then
                 self:safeAnimate(girlfriend, "danceLeft", false, 1)
@@ -261,8 +271,33 @@ return {
             end
 
             if curBeat % 4 == 0 and camera.zooming then
-                camera.zoom = camera.zoom + 0.0125
+                camera.zoom = camera.zoom + 0.025
                 uiScale.zoom = uiScale.zoom + 0.025
+            end
+        end
+
+        for i = 1, #songEvents do
+            if songEvents[i].eventTime <= absMusicTime then
+                local allEvents = songEvents[i].allEvents
+                for i, event in ipairs(allEvents) do
+                    if event[1] == "Set Property" then
+                        if event[2] == "defaultCamZoom" then
+                            camera.toZoom = tonumber(event[3])
+                        end
+                    elseif event[2] == "Add CameraZoom" then
+                        local uiZoom, camZoom
+                        if event[2] then camZoom = tonumber(event[3])
+                        else camZoom = 0.015 end
+                        if event[3] then uiZoom = tonumber(event[4])
+                        else uiZoom = 0.03 end
+                        
+                        camera.zoom = camera.zoom + camZoom
+                        uiScale.zoom = uiScale.zoom + uiZoom
+                    end
+                end
+                break
+            else
+                break
             end
         end
 
@@ -271,10 +306,25 @@ return {
                 if camTimer then
                     Timer.cancel(camTimer)
                 end
+                if lightTimer then
+                    Timer.cancel(lightTimer)
+                end
                 if events[i].mustHitSection then
                     camTimer = Timer.tween(1.25, camera, {x= -boyfriend.x + 60, y=-boyfriend.y + 15}, "out-quad")
+                    if song == 2 then
+                        lightTimer = Timer.tween(1, funkylight, {x = boyfriend.x}, "out-quad")
+                        if greenMode then
+                            bgColor = {0,0.95294117647,0.25098039215,1}
+                        end
+                    end
                 else
                     camTimer = Timer.tween(1.25, camera, {x= -enemy.x - 25, y=-enemy.y + 30}, "out-quad")
+                    if song == 2 then
+                        lightTimer = Timer.tween(1, funkylight, {x = enemy.x}, "out-quad")
+                        if greenMode then
+                            bgColor = {0,1,0}
+                        end
+                    end
                 end
 
                 table.remove(events, i)
@@ -314,6 +364,9 @@ return {
         local minutes = math.floor(timeLeft / 60)
         local seconds = math.floor(timeLeft - (minutes * 60))
         timeLeft = string.format("%02d:%02d", minutes, seconds)
+        if song == 2 then
+            timeLeft = "BE PATIENT"
+        end
     end,
 
     safeAnimate = function(self, sprite, animName, loopAnim, timerID, afterFunc)
@@ -321,27 +374,23 @@ return {
 		sprite:animate(animName, loopAnim, afterFunc)
 	end,
 
-    draw = function(self, screen)
-        
-    end,
-
     drawTop = function(self, screen)
         love.graphics.push()
+        love.graphics.translate(200, 120)
         love.graphics.scale(uiScale.zoom, uiScale.zoom)
-        love.graphics.translate(graphics.getWidth() / 2, graphics.getHeight() / 2)
         for i = 1, 4 do
             enemyArrows[i]:draw()
             boyfriendArrows[i]:draw()
 
             -- draw notes if they are on screen!
             for j = #enemyNotes[i], 1, -1 do
-                if (not downscroll and enemyNotes[i][j].y < 115) or (downscroll and enemyNotes[i][j].y > -115) then
+                if (not downscroll and enemyNotes[i][j].y < 125) or (downscroll and enemyNotes[i][j].y > -125) then
                     enemyNotes[i][j]:draw()
                 end
             end
 
             for j = #boyfriendNotes[i], 1, -1 do
-                if (not downscroll and boyfriendNotes[i][j].y < 115) or (downscroll and boyfriendNotes[i][j].y > -115) then
+                if (not downscroll and boyfriendNotes[i][j].y < 125) or (downscroll and boyfriendNotes[i][j].y > -125) then
                     boyfriendNotes[i][j]:draw()
                 end
             end
@@ -364,12 +413,18 @@ return {
             love.graphics.setColor(1,1,1)
         love.graphics.pop()
 
-        clock:draw()
+        if song == 1 then
+            clock:draw()
+        end
 
         love.graphics.push()
             borderedText(timeLeft, 252, 12)
 
-            borderedText("Score: " .. score .. "  |  Misses: " .. misses .. "  |  Combo: " .. combo, 10, 14)
+            if song == 1 then
+                borderedText("Score: " .. score .. "  |  Misses: " .. misses .. "  |  Combo: " .. combo, 10, 14)
+            else
+                borderedText('YOU DON"T NEED STATISTICS IN H LAND', 10, 14)
+            end
         love.graphics.pop()
     end,
 } 
