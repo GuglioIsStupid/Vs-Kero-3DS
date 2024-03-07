@@ -1,9 +1,30 @@
+function lerp(a,b,t)
+    return a + (b-a)*t
+end
+
+function coolLerp(a, b, t)
+    return lerp(a, b, t * 60 * love.timer.getDelta())
+end
+
+function clamp(a, b, c)
+    return math.max(math.min(a, c), b)
+end
+
+love._console = love._console or "Non_Console_PC"
+
+if love._console == "Non_Console_PC" then
+    function love.graphics.getDimensions(screen)
+        if screen == 1 then
+            return 400, 240
+        else
+            return 320, 240
+        end
+    end
+end
+
 function love.load()
     require "lib.dslayout"
-    dslayout:init({
-        color = { r = 0.2, g = 0.2, b = 0.25, a = 1 },
-        title = "Vs Kero"
-    })
+
     gamestate = require "lib.gamestate"
     json = require "lib.json"
     Timer = require "lib.timer"
@@ -15,7 +36,7 @@ function love.load()
     graphics = require "modules.graphics"
 
     downscroll = false
-    local curOS = love.system.getOS()
+
     input = (require("lib.baton")).new {
         controls = {
             left = {"axis:leftx-", "button:dpleft"},
@@ -25,20 +46,25 @@ function love.load()
             confirm = {"button:a"},
             back = {"button:b"},
 
-            gameLeft = {"button:leftshoulder", "axis:leftx-", "axis:rightx-", "button:dpleft", "button:y"},
-            gameDown = {"axis:lefty+", "axis:righty+", "axis:triggerleft+", "button:dpdown", "button:b"},
-            gameUp = {"axis:lefty-", "axis:righty-", "axis:triggerright+", "button:dpup", "button:x"},
-            gameRight = {"button:rightshoulder", "axis:leftx+", "axis:rightx+", "button:dpright", "button:a"},
+            gameLeft = {"axis:triggerleft+", "axis:leftx-", "axis:rightx-", "button:dpleft", "button:y"},
+            gameDown = {"axis:lefty+", "axis:righty+", "button:leftshoulder", "button:dpdown", "button:b"},
+            gameUp = {"axis:lefty-", "axis:righty-", "button:rightshoulder", "button:dpup", "button:x"},
+            gameRight = {"axis:triggerright+", "axis:leftx+", "axis:rightx+", "button:dpright", "button:a"},
 
             gameBack = {"button:start"},
         },
         joystick = love.joystick.getJoysticks()[1],
     }
 
+    dslayout:init({
+        color = { r = 0.2, g = 0.2, b = 0.25, a = 1 },
+        title = "Vs Kero"
+    })
+
     camera = {
         zoom = 1,
         toZoom = 1,
-        x=0,y=0,
+        x=0, y=0,
         zooming = true,
         locked = false
     }
@@ -46,16 +72,6 @@ function love.load()
     font = love.graphics.newFont("assets/vcr.ttf", 18)
     menuFont = love.graphics.newFont("assets/vcr.ttf", 24)
     love.graphics.setFont(menuFont)
-
-    function lerp(a,b,t)
-        return a + (b-a)*t
-    end
-    function coolLerp(a, b, t)
-        return lerp(a, b, t * 60 * love.timer.getDelta())
-    end
-    function clamp(a, b, c)
-        return math.max(math.min(a, c), b)
-    end
 
     uiScale = {
         zoom = 1,
@@ -66,14 +82,16 @@ function love.load()
     spriteTimers = {
 		0, -- Girlfriend
 		0, -- Enemy
-		0 -- Boyfriend
+		0  -- Boyfriend
 	}
 
     menu = require "states.menu"
     weeks = require "states.weeks"
-    week = require "states.week"
+    kero_week = require "states.kero-week"
 
     gamestate.switch(menu)
+
+    graphics.screenBase(love.graphics.getDimensions(1))
 end
 
 function love.update(dt)

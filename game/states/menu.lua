@@ -1,11 +1,7 @@
 -- preload to not interfere with the game loading a week !! (theres only one so its very minimal LMAOOO)
+-- Shit. Now theres two.
 function borderedText(text, x, y)
     -- white outline with red inside
-    love.graphics.setColor(1, 1, 1, 1)
-    love.graphics.print(text, x+1, y)
-    love.graphics.print(text, x-1, y)
-    love.graphics.print(text, x, y+1)
-    love.graphics.print(text, x, y-1)
     love.graphics.setColor(1, 0, 0, 1)
     love.graphics.print(text, x, y)
     love.graphics.setColor(1, 1, 1, 1)
@@ -30,8 +26,8 @@ downarrow = love.filesystem.load("assets/sprites/notes/down.lua")
 uparrow = love.filesystem.load("assets/sprites/notes/up.lua")
 rightarrow = love.filesystem.load("assets/sprites/notes/right.lua")
 
-inst = love.audio.newSource("assets/music/Inst.ogg", "stream")
-voices = love.audio.newSource("assets/music/Voices.ogg", "stream")
+inst = love.audio.newSource("assets/music/kero-Inst.ogg", "stream")
+voices = love.audio.newSource("assets/music/kero-Voices.ogg", "stream")
 
 instDuration = inst:getDuration()
 
@@ -85,10 +81,10 @@ return {
         }
 
         for i = 1, 4 do
-            enemyArrows[i].x = -370 + ((i-1) * 40)
+            enemyArrows[i].x = -160 + ((i-1) * 40)
             enemyArrows[i].y = -90
 
-            boyfriendArrows[i].x = -150 + ((i-1) * 40)
+            boyfriendArrows[i].x = 45 + ((i-1) * 40)
             boyfriendArrows[i].y = -90
 
             enemyArrows[i].orientation = rotations[i]
@@ -128,6 +124,8 @@ return {
         if not bpm then
             bpm = chart.bpm or 100
         end
+        crochet = ((60/bpm) * 1000) -- Beats in milliseconds
+        stepCrochet = crochet / 4
 
         speed = chart.speed
 
@@ -358,7 +356,7 @@ return {
 
         if input:pressed("confirm") then
             music:stop()
-            gamestate.switch(week)
+            gamestate.switch(kero_week)
         elseif input:pressed("back") then
             downscroll = not downscroll
             for i = 1, 4 do

@@ -124,6 +124,8 @@ return {
 			offsetY = nil
 		}
 
+		local afterFunc = nil
+
 		local isAnimated
 		local isLooped
 
@@ -150,13 +152,15 @@ return {
 				return sheet
 			end,
 
-			animate = function(self, animName, loopAnim)
+			animate = function(self, animName, loopAnim, afterFunc)
 				anim.name = animName
 				anim.start = anims[animName].start
 				anim.stop = anims[animName].stop
 				anim.speed = anims[animName].speed
 				anim.offsetX = anims[animName].offsetX
 				anim.offsetY = anims[animName].offsetY
+
+				afterFunc = afterFunc
 
 				frame = anim.start
 				isLooped = loopAnim
@@ -192,6 +196,7 @@ return {
 				end
 
 				if isAnimated and frame > anim.stop then
+					if afterFunc then print("AFTERFUNC"); afterFunc(); afterFunc = nil end
 					if isLooped then
 						frame = anim.start
 					else
