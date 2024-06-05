@@ -1,7 +1,7 @@
 local title = {}
 
 function title:enter()
-    __DEBUG_COLOR__ = {1,1,1,1}
+    __DEBUG_COLOR__ = {0,0,0,1}
     gfTitle = love.filesystem.load("assets/sprites/kero/gf.lua")()
 
     gfTitle.x = 80
@@ -54,11 +54,13 @@ function title:update(dt)
 end
 
 function title:topDraw()
+    graphics.setColor(1, 1, 1, 1)
+    love.graphics.rectangle("fill", -600, -200, 1200, 1200)
     love.graphics.push()
-        graphics.setColor(1,1,1)
         love.graphics.translate(200, 120)
         gfTitle:draw()
 
+        graphics.setColor(0,0,0)
         love.graphics.printf(
             "* Friday Night Funkin\n* Vs Kero\n* 3DS Port - GuglioIsStupid",
             -185, -100,
@@ -67,10 +69,13 @@ function title:topDraw()
             0,
             textScale, textScale
         )
+        graphics.setColor(1,1,1)
     love.graphics.pop()
 end
 
 function title:bottomDraw()
+    graphics.setColor(1, 1, 1, 1)
+    love.graphics.rectangle("fill", -600, -200, 1200, 1200)
     love.graphics.push()
         love.graphics.printf(
             "Built on: Funkin 3DS" .. "\n" ..

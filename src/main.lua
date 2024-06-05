@@ -1,8 +1,8 @@
 require "modules.overrides"
-local desktop = {"Windows", "Linux", "OSX"}
+local desktops = {"Windows", "Linux", "OS X"}
 
 __DEBUG__ = false
-__DEBUG_COLOR__ = {1,1,1,1}
+__DEBUG_COLOR__ = {0,0,0,1}
 
 function love.load()
     if love.graphics.setDefaultFilter then
@@ -12,7 +12,7 @@ function love.load()
     state = require "lib.state"
     require "lib.dslayout"
 
-    if table.find(desktop, love.system.getOS()) then
+    if table.find(desktops, love.system.getOS()) then
         -- is desktop (used for testing)
         input = (require "lib.baton").new {
             controls = {
