@@ -1,2 +1,7 @@
 build/*
-scripts.txt
+tools/json-to-lua/charts/*
+
+!*.gitkeep
+
+art/*.png
+art/*.xml

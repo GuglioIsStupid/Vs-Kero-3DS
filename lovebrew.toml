@@ -5,10 +5,10 @@
 # [string] @description : Description of the game.
 # [string] @version     : Version of the game in {major}.{minor}.{revision} format.
 [metadata]
-name = "VsKero"
-author = "Ghospel_ghost"
-description = "Port by GuglioIsStupid"
-version = "0.3.0"
+name = "VsKero3DS"
+author = "GuglioIsStupid"
+description = "3DS Demake of the Vs Kero Mod"
+version = "0.4.0"
 
 ## --- Build Options --- ##
 
@@ -31,8 +31,8 @@ version = "0.3.0"
 [build]
 clean = false
 targets = ["3ds"]
-source = "game"
-icon = "meta/icon"
+source = "src"
+icon = "icon"
 searchPath = ""
 
 ## --- Output Options --- ##
